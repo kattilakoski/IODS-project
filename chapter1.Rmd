@@ -6,17 +6,6 @@ I also expect to learn the best practices in open data science. I heard about th
 the email list of my doctoral program.
 
 ### Reflections on the learning experience:
-So far the book and exercises have been a great crash course to R tools and RStudio.
+So far the book and exercises have been a great crash course to R tools and RStudio.I enjoy the style of writing in the book. My favorite section so far is the chapter 4 focusing on plots. I found it useful.
 
 My GitHyb repository: https://github.com/kattilakoski/IODS-project
-
-*Write a short description about the course and add a link to your GitHub repository here. This is an R Markdown (.Rmd) file so you should use R Markdown syntax.*
-
-```{r}
-# This is a so-called "R chunk" where you can write R code.
-
-date()
-
-```
-
-The text continues here.
