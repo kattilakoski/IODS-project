@@ -1,8 +1,8 @@
 ## Chapter 1 
 ### Thoughts about this course:
-I enjoyed the soft landing on this course. It was comforting to start and go through the very basics. \ 
-From this course, I expect to learn to integrate the use of github and R markdown in my daily work. \
-I also expect to learn the best practices in open data science. I heard about this course through \ 
+I enjoyed the soft landing on this course. It was comforting to start and go through the very basics.  
+From this course, I expect to learn to integrate the use of github and R markdown in my daily work. 
+I also expect to learn the best practices in open data science. I heard about this course through  
 the email list of my doctoral program.
 
 ### Reflections on the learning experience:
