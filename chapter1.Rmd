@@ -1,9 +1,14 @@
 ## Chapter 1 
-###Thoughts about this course:
+### Thoughts about this course:
 I enjoyed the soft landing on this course. It was comforting to start and go through the very basics. \ 
 From this course, I expect to learn to integrate the use of github and R markdown in my daily work. \
 I also expect to learn the best practices in open data science. I heard about this course through \ 
 the email list of my doctoral program.
+
+### Reflections on the learning experience:
+So far the book and exercises have been a great crash course to R tools and RStudio.
+
+My GitHyb repository: https://github.com/kattilakoski/IODS-project
 
 *Write a short description about the course and add a link to your GitHub repository here. This is an R Markdown (.Rmd) file so you should use R Markdown syntax.*
 
