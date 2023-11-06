@@ -7,4 +7,4 @@ the email list of my doctoral program.
 ### Reflections on the learning experience:
 So far the book and exercises have been a great crash course to R tools and RStudio.I enjoy the style of writing in the book. My favorite section so far is the chapter 4 focusing on plots. I found it useful.
 
-My GitHyb repository: https://github.com/kattilakoski/IODS-project
+My GitHub repository: https://github.com/kattilakoski/IODS-project
