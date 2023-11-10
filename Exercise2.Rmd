@@ -495,7 +495,7 @@ qplot(attitude, points, data = learning2014) + geom_smooth(method = "lm")
 my_model <- lm(points ~ 1, data = learning2014)
 
 # print out a summary of the model
-
+summary(my_model)
 
 ```
 
@@ -542,7 +542,7 @@ ggpairs(learning2014, lower = list(combo = wrap("facethist", bins = 20)))
 my_model2 <- lm(points ~ attitude + stra, data = learning2014)
 
 # print out a summary of the model
-
+summary(my_model2)
 
 ```
 
