@@ -24,8 +24,6 @@ pairs(learning2014[-1])
 
 # create a more advanced plot matrix with ggpairs()
 p <- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
-# draw the plot
-p
 
 ```
 
@@ -68,11 +66,11 @@ The multiple R-squared for the first regression model with all three explanatory
 ```{r message=FALSE, warning=FALSE}
 # draw diagnostic plots using the plot() function. Choose the plots 1, 2 and 5 for Residuals vs Fitted values, Normal QQ-plot and Residuals vs Leverage
 par(mfrow = c(2,2))
-plot(my_model2, c(1,2,5))
+p <- plot(my_model2, c(1,2,5))
 
 #same for the model with only attitude as the explanatory variable
 par(mfrow = c(2,2))
-plot(my_model3, c(1,2,5))
+p <- plot(my_model3, c(1,2,5))
 
 ```
 
