@@ -34,29 +34,28 @@ strategic_columns <- select(lrn14, one_of(strategic_questions))
 # and create column 'stra' by averaging
 lrn14$stra <- rowMeans(strategic_columns)
 
-#Create analysis dataset with the variables gender, age, attitude, deep, stra, surf and points(tarkista isot kirjaimet kun ajat tän maanantaina)
+# print the "Attitude" column vector of the lrn14 data
+lrn14$Attitude
+
+# divide each number in the column vector
+lrn14$Attitude / 10
+
+# create column 'attitude' by scaling the column "Attitude"
+lrn14$attitude <- lrn14$Attitude / 10
+
+#Create analysis dataset with the variables gender, age, attitude, deep, stra, surf and points
 keep_columns <- c("gender","Age","attitude", "deep", "stra", "surf", "Points")
 
 # select the 'keep_columns' to create a new dataset
 learning2014 <- select(lrn14, one_of(keep_columns))
 
-#TArviiko tätä? Scale all combination variables to the original scales (by taking the mean).
-# divide each number in the column vector
-#lrn14$Attitude / 10
-
-# create column 'attitude' by scaling the column "Attitude"
-#lrn14$attitude <- lrn14$Attitude / 10
-
-# select rows where points is greater than zero, tarkista onko points vai Points
+# select rows where points is greater than zero
 learning2014 <- filter(learning2014, Points > 0)
 
-#set woeking directory to IODS-project folder:
-setwd("C:/Users/.../.../.../IODS2023/IODS-project")
+#set working directory to IODS-project folder:
+setwd("C:/Users/Tohtorikurssit/IODS2023/IODS-project")
 
 write_csv(learning2014, "C:/Users/Tohtorikurssit/IODS2023/IODS-project/data/learning2014.csv")
 learning2014 <- read_csv("C:/Users/Tohtorikurssit/IODS2023/IODS-project/data/learning2014.csv")
 str(learning2014)
 head(learning2014)
-
-
-#Analysis part of the assignment 2:
