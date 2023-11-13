@@ -53,8 +53,8 @@ learning2014 <- filter(learning2014, Points > 0)
 #set woeking directory to IODS-project folder:
 setwd("C:/Users/.../.../.../IODS2023/IODS-project")
 
-write_csv(learning2014, "C:/Users/03232430/OneDrive - Valtion/Tohtorikurssit/IODS2023/IODS-project/data/learning2014.csv")
-learning2014 <- read_csv("C:/Users/03232430/OneDrive - Valtion/Tohtorikurssit/IODS2023/IODS-project/data/learning2014.csv")
+write_csv(learning2014, "C:/Users/Tohtorikurssit/IODS2023/IODS-project/data/learning2014.csv")
+learning2014 <- read_csv("C:/Users/Tohtorikurssit/IODS2023/IODS-project/data/learning2014.csv")
 str(learning2014)
 head(learning2014)
 
