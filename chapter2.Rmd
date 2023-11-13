@@ -27,13 +27,13 @@ p <- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = lis
 
 ```
 
-In the first scatter plot matrix each variable is plotted against each others. The variables are written in a diagonal in the plot. In the plots on the same row with the variable text box the variable is on the y axis of the plot. In the plots in the same column with the variable text box the variable is on the x-axis of the plot. 
+In the first scatter plot matrix each variable is plotted against each others. The variables are written in a diagonal in the plot. In the plots on the same row with the variable text box the variable is on the y axis of the plot. In the plots in the same column with the variable text box the variable is on the x-axis of the plot.
 
 Based on this scatter plot matrix there are no clearly visible correlations between any of the variables. However, some seem to have some kind of upward or downward trend such as attitude and points as well as deep vs surface strategies.
 
 ![Graphical overview of the data.](images/advanced_matrix.PNG)
 
-In the second plot matrix created with ggpairs() the variables are on the top and left side of the plot. The top right side of the matrix shows the correlation between the continuous variables (age, attitude, deep, strategic, surface), the lower left side shows the scatter plots of the continuous variables, the diagonal the density plots of the continuous variables, and the leftmost column shows the histograms and box plots for the combinations between the categorical and the continuous variables. 
+In the second plot matrix created with ggpairs() the variables are on the top and left side of the plot. The top right side of the matrix shows the correlation between the continuous variables (age, attitude, deep, strategic, surface), the lower left side shows the scatter plots of the continuous variables, the diagonal the density plots of the continuous variables, and the leftmost column shows the histograms and box plots for the combinations between the categorical and the continuous variables.
 
 From the matrix we can see that majority of the interviewees were female and around 20 years old. Age was not significantly correlating with any variable. Attitude had significant positive correlation with points and significant negative correlation with surface approach. Deep approach had significant negative correlation with surface approach. Strategic approach had negative correlation with surface approach. This matrix confirmed the trends that were visible in the previous scatter plot matrix
 
@@ -66,18 +66,17 @@ The multiple R-squared for the first regression model with all three explanatory
 ```{r message=FALSE, warning=FALSE}
 # draw diagnostic plots using the plot() function. Choose the plots 1, 2 and 5 for Residuals vs Fitted values, Normal QQ-plot and Residuals vs Leverage
 par(mfrow = c(2,2))
-p <- plot(my_model2, c(1,2,5))
+#plot(my_model2, c(1,2,5))
 
 #same for the model with only attitude as the explanatory variable
 par(mfrow = c(2,2))
-p <- plot(my_model3, c(1,2,5))
+#plot(my_model3, c(1,2,5))
 
 ```
 
 ![Diagnostic plots for the regression model with attitude as an explanatory variable.](images/diagnostic_plots.png)
 
 ![Diagnostic plots for the regression model with attitude, strategic and surface as the explanatory variables.](images/diagnostic_plots_multi.png)
-
 
 It seems that there is no distinctive pattern in the Residuals vs fitted plots in either case meaning that there is no non-linear relationship between the explanatory and target variables.
 
