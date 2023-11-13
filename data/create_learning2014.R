@@ -2,6 +2,9 @@
 # author: Matilda Kattilakoski
 # description: Data wrangling part of assignment 2 on the IODS2023 course.
 
+#access libraries:
+library(readr)
+library(tidyverse)
 # read the data into memory
 lrn14 <- read.table("http://www.helsinki.fi/~kvehkala/JYTmooc/JYTOPKYS3-data.txt", sep="\t", header=TRUE)
 
