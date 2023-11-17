@@ -38,7 +38,7 @@ In the second plot matrix created with ggpairs() the variables are on the top an
 From the matrix we can see that majority of the interviewees were female and around 20 years old. Age was not significantly correlating with any variable. Attitude had significant positive correlation with points and significant negative correlation with surface approach. Deep approach had significant negative correlation with surface approach. Strategic approach had negative correlation with surface approach. This matrix confirmed the trends that were visible in the previous scatter plot matrix
 
 ## Regression model
-
+ 
 ```{r}
 # create a regression model with three explanatory variables
 my_model2 <- lm(points ~ attitude + stra + surf, data = learning2014)
