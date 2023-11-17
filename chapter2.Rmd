@@ -8,6 +8,7 @@ The dataset used in this assignment is from a survey of learning approaches and 
 # access the GGally and ggplot2 libraries
 library(GGally)
 library(ggplot2)
+library(tidyverse)
 
 #Read the data in:
 learning2014 <- read_csv("./data/learning2014.csv")
