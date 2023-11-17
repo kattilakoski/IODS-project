@@ -10,7 +10,7 @@ library(GGally)
 library(ggplot2)
 
 #Read the data in:
-learning2014 <- read_csv("./IODS2023/IODS-project/data/learning2014.csv")
+learning2014 <- read_csv("./data/learning2014.csv")
 #Explore dimensions:
 dim(learning2014)
 #and structure
