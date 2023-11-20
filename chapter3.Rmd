@@ -6,7 +6,7 @@ output: html_document
 ---
 ## Reading in and description of the data
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+
 #install packages:
 # install.packages("boot")
 # install.packages("readr")
@@ -58,7 +58,7 @@ Based on the distribution plots it looks like my hypothesis is correct and that 
 
 ## Logistic regression, odd ratios and coefficients
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
 # find the model with glm()
 m <- glm(high_use ~ age + Medu + studytime + absences, data = alc, family = "binomial")
 
