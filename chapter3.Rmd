@@ -28,7 +28,7 @@ For this analysis I choose to focus on age, mother's education, study time and a
 
 ## Exploring the distributions of the variables and their relationship with alcohol use
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 #distribution of alcohol consumption and age
 d1 <- ggplot(alc, aes(x = high_use, y = age)) + geom_boxplot() + ggtitle("Age and alcohol consumption")
 d1
@@ -56,9 +56,8 @@ alc %>% group_by(high_use) %>% summarise(count = n(), mean(absences))
 
 Based on the distribution plots it looks like my hypothesis is correct and that younger students drink less than older students. When looking at the numerical summary the difference in the mean age is only 0.27 years which seems small. Against my hypothesis it looks like there is no difference in the  alcohol use of students with mother's from different education levels and this is also visible in the summary as the difference between mean education level of mothers is only 0.01. Based on the distributions it looks like my hypothesis on study time was right as the students drinking less seem to study more and this is backed up by the summary as well as there is a difference in the mean study times of students with high and low alcohol use. However, the difference is only 0.40 hours. It seems that my hypothesis was right about the absences as students that drink more seem to have more absences. The difference between absences of students with high and low alchol use is the clearest and the mean absence of students with high alcohol use is 2.67 absences more than students with low alcohol use.
 
-## Logistic regression, odd ratios and coefficients
-```{r setup, include=FALSE}
-
+## Logistic regression, odd ratios and coefficients`
+```{r, include=FALSE}
 # find the model with glm()
 m <- glm(high_use ~ age + Medu + studytime + absences, data = alc, family = "binomial")
 
@@ -79,12 +78,13 @@ CI <- confint(m) %>% exp()
 cbind(OR, CI)
 ```
 
+
 Based on the negative coefficient estimates of the summary statistics of the fitted model, higher values of mother's education and student's study time are associated with a lower likelihood of the high_use variable being TRUE and the opposite  for the age and absences variables. However, only the coefficients for study time and absences are statistically significant. Therefore from the summary of the model one could say that the more time time a student spends studying the lower the likelihood of them having high usage of alcohol. And the higher the number of absence days of the student is the higher the likelihood that their alcohol usage is high. Based on these results my hypothesis about mother's education and age were wrong and the hypothesis on study time and absences were right.
 
 Based on the odds ratio for a one year increase in age the odds that the student have high alcohol usage increases by a factor of 1.18 when other variables stay stable. And the same idea for other variables. So each additional education level the odds that student has high alcohol usage increases by a factor of 1.00 meaning that there is no change in the alcohol usage, for each hour spent studying the odds decrease by a factor of 0.56 and for every increased absence the odds increase by a factor of 1.08 . Based on these results the biggest increases or decreases in odds are caused by age (the higher the age the higher the alcohol usage) and study time (the higher the study time the lower the alcohol usage).The confidence intervals for the intercept, age, Medu, studytime and absences are 0.00-1.98, 0.96-1.45, 0.80-1.24, 0.41-0.76 and 1.03-1.13 respectively. Interpretation for these values are that we are 95% confident that the correlation between the given variable and target variable is between the values of those confidence intervals. For example we are 95% confident that the correlation between age and alcohol usage is between 0.96-1.45. This is pretty high interval and therefore we don't have very good knowledge of the effect. Same goes for mother's education. The confidence intervals for study time and absences are smaller meaning we have better knowledge of their effect on the target variable (alcohol use).Based on these results my hypothesis about mother's education was wrong and the hypotheses on age, study time and absences were right.
 
 ## Exploring the predictive power of the model
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 # find the model with glm() for only the statistically significant study time and absences
 m <- glm(high_use ~ studytime + absences, data = alc, family = "binomial")
 # predict() the probability of high_use
