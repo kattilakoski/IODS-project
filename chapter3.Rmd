@@ -1,0 +1,117 @@
+---
+title: "chapter3.Rmd"
+author: "Matilda K"
+date: "2023-11-20"
+output: html_document
+---
+## Reading in and description of the data
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+#install packages:
+# install.packages("boot")
+# install.packages("readr")
+
+# access libraries
+library(dplyr); library(ggplot2); library(readr); library(tidyr); library(boot)
+
+#Read the joined student alcohol consumption data into R
+alc <- read_csv("./data/student_alc.csv")
+
+# Print out the names of the variables in the data 
+colnames(alc)
+```
+This data set includes data on student achievements in two Portuguese schools. It includes 370 observations and 35 variables. Variables include for example student grades, sex and age. The dataset was formed by combining two datasets, one regarding the student performance in mathematics and the other in Portuguese language.
+
+###Choosing variables for this analysis
+For this analysis I choose to focus on age, mother's education, study time and absences. My hypothesis is that younger students drink less than older ones, the higher the education level of the mother the lower the alcohol consumption of the student is, students studying more drink less alcohol than students studying less and that the more absences the student has the more they drink.
+
+
+## Exploring the distributions of the variables and their relationship with alcohol use
+
+```{r setup, include=FALSE}
+#distribution of alcohol consumption and age
+d1 <- ggplot(alc, aes(x = high_use, y = age)) + geom_boxplot() + ggtitle("Age and alcohol consumption")
+d1
+#distribution of alcohol consumption and mother's education
+d2 <- ggplot(alc, aes(x = high_use, y = Medu)) + geom_boxplot() + ggtitle("Mother's education and student alcohol consumption")
+d2
+#distribution of alcohol consumption and study time
+d3 <- ggplot(alc, aes(x = high_use, y = studytime)) + geom_boxplot() + ggtitle("Studytime and alcohol consumption")
+d3
+#distribution of alcohol consumption and absences
+d4 <- ggplot(alc, aes(x = high_use, y = absences)) + geom_boxplot() + ggtitle("Absences and alcohol consumption")
+d4
+
+#Summary statistics
+#age
+# produce summary statistics by group
+alc %>% group_by(high_use) %>% summarise(count = n(), mean(age))
+#mother's aducation
+alc %>% group_by(high_use) %>% summarise(count = n(), mean(Medu))
+#study time
+alc %>% group_by(high_use) %>% summarise(count = n(), mean(studytime))
+#absences
+alc %>% group_by(high_use) %>% summarise(count = n(), mean(absences))
+```
+
+Based on the distribution plots it looks like my hypothesis is correct and that younger students drink less than older students. When looking at the numerical summary the difference in the mean age is only 0.27 years which seems small. Against my hypothesis it looks like there is no difference in the  alcohol use of students with mother's from different education levels and this is also visible in the summary as the difference between mean education level of mothers is only 0.01. Based on the distributions it looks like my hypothesis on study time was right as the students drinking less seem to study more and this is backed up by the summary as well as there is a difference in the mean study times of students with high and low alcohol use. However, the difference is only 0.40 hours. It seems that my hypothesis was right about the absences as students that drink more seem to have more absences. The difference between absences of students with high and low alchol use is the clearest and the mean absence of students with high alcohol use is 2.67 absences more than students with low alcohol use.
+
+## Logistic regression, odd ratios and coefficients
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# find the model with glm()
+m <- glm(high_use ~ age + Medu + studytime + absences, data = alc, family = "binomial")
+
+
+# print out a summary of the fitted model
+summary(m)
+
+# print out the coefficients of the model
+coef(m)
+
+# compute odds ratios (OR)
+OR <- coef(m) %>% exp
+
+# compute confidence intervals (CI)
+CI <- confint(m) %>% exp()
+
+# print out the odds ratios with their confidence intervals
+cbind(OR, CI)
+```
+Based on the negative coefficient estimates of the summary statistics of the fitted model, higher values of mother's education and student's study time are associated with a lower likelihood of the high_use variable being TRUE and the opposite  for the age and absences variables. However, only the coefficients for study time and absences are statistically significant. Therefore from the summary of the model one could say that the more time time a student spends studying the lower the likelihood of them having high usage of alcohol. And the higher the number of absence days of the student is the higher the likelihood that their alcohol usage is high. Based on these results my hypothesis about mother's education and age were wrong and the hypothesis on study time and absences were right.
+
+Based on the odds ratio for a one year increase in age the odds that the student have high alcohol usage increases by a factor of 1.18 when other variables stay stable. And the same idea for other variables. So each additional education level the odds that student has high alcohol usage increases by a factor of 1.00 meaning that there is no change in the alcohol usage, for each hour spent studying the odds decrease by a factor of 0.56 and for every increased absence the odds increase by a factor of 1.08 . Based on these results the biggest increases or decreases in odds are caused by age (the higher the age the higher the alcohol usage) and study time (the higher the study time the lower the alcohol usage).The confidence intervals for the intercept, age, Medu, studytime and absences are 0.00-1.98, 0.96-1.45, 0.80-1.24, 0.41-0.76 and 1.03-1.13 respectively. Interpretation for these values are that we are 95% confident that the correlation between the given variable and target variable is between the values of those confidence intervals. For example we are 95% confident that the correlation between age and alcohol usage is between 0.96-1.45. This is pretty high interval and therefore we don't have very good knowledge of the effect. Same goes for mother's education. The confidence intervals for study time and absences are smaller meaning we have better knowledge of their effect on the target variable (alcohol use).Based on these results my hypothesis about mother's education was wrong and the hypotheses on age, study time and absences were right.
+
+## Exploring the predictive power of the model
+```{r setup, include=FALSE}
+# find the model with glm() for only the statistically significant study time and absences
+m <- glm(high_use ~ studytime + absences, data = alc, family = "binomial")
+# predict() the probability of high_use
+probabilities <- predict(m, type = "response")
+
+# add the predicted probabilities to 'alc'
+alc <- mutate(alc, probability = probabilities)
+
+# use the probabilities to make a prediction of high_use
+alc <- mutate(alc, prediction = probability > 0.5)
+
+# see the last ten original classes, predicted probabilities, and class predictions
+select(alc, studytime, absences, high_use, probability, prediction) %>% tail(10)
+
+#2x2 tabulate the target variable versus the predictions
+table(high_use = alc$high_use, prediction = alc$prediction)
+
+# define a loss function (mean prediction error)
+loss_func <- function(class, prob) {
+  n_wrong <- abs(class - prob) > 0.5
+  mean(n_wrong)
+}
+
+# call loss_func to compute the average number of wrong predictions in the (training) data
+loss_func(class = alc$high_use, prob = alc$probability)
+```
+Based on the cross tabulation/confusion matrix the model predicts farely well the cases were alcohol usage is not high only 11 false positives out of the 259 students that reported low alcohol usage. The model does not predict the high use cases very well as out of the 111 high use cases it only got 18 right and 93 false positives.
+
+The model has a prediction error of 0.28 which means that it makes wrong predictions 28% of the times. This is a rather high prediction error and I would conclude that this model does not predict very well and therefore is not very powerful. 
+
+I think the error rate of my guesses as teh model were pretty similar. I would say that the model is slightly better for prediction than guessing.

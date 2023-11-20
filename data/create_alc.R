@@ -8,7 +8,7 @@
 # install.packages("readr")
 
 # access libraries
-# library(dplyr); library(ggplot2); library(readr); library(tidyr); library(boot)
+ library(dplyr); library(ggplot2); library(readr); library(tidyr); library(boot)
 
 # Read both student-mat.csv and student-por.csv into R (from the data folder) 
 mat <- read.table("./data/student-mat.csv", sep=";", header=TRUE)
