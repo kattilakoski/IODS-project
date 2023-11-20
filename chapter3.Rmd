@@ -116,4 +116,4 @@ Based on the cross tabulation/confusion matrix the model predicts farely well th
 
 The model has a prediction error of 0.28 which means that it makes wrong predictions 28% of the times. This is a rather high prediction error and I would conclude that this model does not predict very well and therefore is not very powerful. 
 
-I think the error rate of my guesses as teh model were pretty similar. I would say that the model is slightly better for prediction than guessing.
+I think the "error rate of my guesses" and of the model were pretty similar. I would say that the model is slightly better for prediction than guessing but would have much room for improvement. This could maybe be done for example by including other variables.
