@@ -4,6 +4,7 @@ author: "Matilda K"
 date: "2023-11-20"
 output: html_document
 ---
+# Assignment 3 analysis
 ## Reading in and description of the data
 ```{r setup}
 
