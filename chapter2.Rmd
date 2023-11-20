@@ -4,7 +4,7 @@ The dataset used in this assignment is from a survey of learning approaches and 
 
 ## Reading data in and graphical overview of the data
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 # access the GGally and ggplot2 libraries
 library(GGally)
 library(ggplot2)
@@ -77,7 +77,6 @@ plot(my_model3, c(1,2,5))
 
 ![Diagnostic plots for the regression model with attitude as an explanatory variable.](images/diagnostic_plots.png)
 
-![Diagnostic plots for the regression model with attitude, strategic and surface as the explanatory variables.](images/diagnostic_plots_multi.png)
 
 It seems that there is no distinctive pattern in the Residuals vs fitted plots in either case meaning that there is no non-linear relationship between the explanatory and target variables.
 
