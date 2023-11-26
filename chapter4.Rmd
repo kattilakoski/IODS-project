@@ -10,7 +10,7 @@ output: html_document
 ```{r 2., include=FALSE}
 # Install required packages:
 #install.packages(c("MASS", "corrplot"))
-
+#install.packages("plotly")
 # Access required packages
 library(MASS)
 library(tidyverse)
@@ -239,7 +239,6 @@ dim(lda.fit$scaling)
 matrix_product <- as.matrix(model_predictors) %*% lda.fit$scaling
 matrix_product <- as.data.frame(matrix_product)
 #Next, install and access the plotly package. Create a 3D plot (cool!) of the columns of the matrix product using the code below.
-install.packages("plotly")
 library(plotly)
 plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, type= 'scatter3d', mode='markers')
 
