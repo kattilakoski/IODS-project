@@ -183,8 +183,8 @@ km <- kmeans(boston_scaled, centers = 2)
 
 # plot the Boston dataset with clusters
 pairs(boston_scaled, col = km$cluster)
-p <- ggpairs(boston_scaled, col = km$cluster)
-p
+#p <- ggpairs(boston_scaled, col = km$cluster)
+#p
 
 ```
 The optimal number of clusters is visible in the qplot where the line drops suddenly. In this case it is around 2. Therefore 2 is the optimal number of clusters.
