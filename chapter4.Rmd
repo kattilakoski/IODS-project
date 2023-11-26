@@ -1,0 +1,258 @@
+---
+title: "chapter4.Rmd"
+author: "Matilda K"
+date: "2023-11-26"
+output: html_document
+---
+
+# Assignment 4 analysis exercises
+## Reading in and description of the data
+```{r 2., include=FALSE}
+# Install required packages:
+#install.packages(c("MASS", "corrplot"))
+
+# Access required packages
+library(MASS)
+library(tidyverse)
+library(corrplot)
+library(ggplot2)
+library(dplyr)
+library(GGally)
+
+# Load the Boston data from the MASS package
+data("Boston")
+
+# Explore the structure and the dimensions of the data 
+glimpse(Boston) # 506 rows amd 14 columns
+str(Boston)
+dim(Boston)
+
+```
+The dataset used in this assingment and the explanations for variablenames are found in here:
+https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/Boston.html
+The dataset has 506 rows and 14 columns and in includes information on the housing values in suburbs of Boston. The columns include for example per capita crime rate by town (crim) and average number of rooms per dwelling (rm).
+
+``` {r 3.}
+# Show a graphical overview of the data 
+pairs(Boston)
+
+p <- ggpairs(Boston)
+# draw the plot
+p
+
+# Show summaries of the variables in the data.
+summary(Boston)
+
+# calculate the correlation matrix and round it
+cor_matrix <- cor(Boston) %>% round(digits = 2)
+
+# print the correlation matrix
+cor_matrix
+
+# visualize the correlation matrix
+corrplot(cor_matrix, method="circle", type = "upper", cl.pos = "b", tl.pos = "d", tl.cex = 0.6)
+
+
+```
+
+Based on the plot matrix it seems that all variables have statistically significant correlations with each other except chas (Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)) which doesn't correlate at all or has a weaker correlation than that of other variables. Chas has values only of 0 and 1. From the density plots we can see for example that crim, zn, chas, dis, rad, tax and lstat are mostly very low (although some have a second small peak), only rm looks to be normally distributed, indus has two even peaks, and age, ptratio and black have mostly higher values.
+
+Same trends are showing in the corrplot. However, maybe the strength (intensity of color) and sign of the correlation (blue for pos and red for neg) is more easily visible. Strongest negative correlations (meaning when one gets higher the other gets lower) seem to be between indus and dis, nox and dis, age and dis, and lstat and medv. Strongest positive correlation (one gets higher the other gets higher too) seem to be between rad and tax.
+
+``` {r 4.}
+# Standardize the dataset
+boston_scaled <- scale(Boston)
+
+# Print out summaries of the scaled data 
+summary(boston_scaled)
+
+# change the object to data frame
+boston_scaled <- as.data.frame(boston_scaled)
+
+# create a quantile vector of crim and print it
+bins <- quantile(boston_scaled$crim)
+bins
+
+# create a categorical variable 'crime', using the quantiles as the break points in the categorical variable
+crime <- cut(boston_scaled$crim, breaks = bins, include.lowest = TRUE, labels = c("low", "med_low", "med_high", "high"))
+
+# Drop the old crime rate variable from the dataset
+boston_scaled <- dplyr::select(boston_scaled, -crim)
+
+# add the new categorical value to scaled data
+boston_scaled <- data.frame(boston_scaled, crime)
+
+# Divide the dataset to train and test sets, so that 80% of the data belongs to the train set
+# number of rows in the Boston dataset 
+n <- nrow(boston_scaled)
+
+# choose randomly 80% of the rows
+ind <- sample(n,  size = n * 0.8)
+
+# create train set
+train <- boston_scaled[ind,]
+
+# create test set 
+test <- boston_scaled[-ind,]
+
+```
+As a result of scaling the variable values got smaller and the mean of each variable is zero. This is because in the scaling the column means were subtracted from the corresponding columns and the difference was divided  with standard deviation.
+
+```{r 5.}
+# Fit the linear discriminant analysis on the train set. Use the categorical crime rate as the target variable and all the other variables in the dataset as predictor variables
+# linear discriminant analysis
+lda.fit <- lda(crime ~ ., data = train)
+
+# print the lda.fit object
+lda.fit
+
+#Draw the LDA (bi)plot.
+# the function for lda biplot arrows
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  graphics::arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+
+# target classes as numeric
+classes <- as.numeric(train$crime)
+
+# plot the lda results (select both lines and execute them at the same time!)
+plot(lda.fit, dimen = 2, col = classes, pch = classes)
+lda.arrows(lda.fit, myscale = 2)
+
+```
+
+```{r 6.}
+# Save the crime categories from the test set 
+correct_classes <- test$crime
+
+# remove the crime variable from test data
+test <- dplyr::select(test, -crime)
+
+# Then predict the classes with the LDA model on the test data
+lda.pred <- predict(lda.fit, newdata = test)
+
+# Cross tabulate the results with the crime categories from the test set.
+table(correct = correct_classes, predicted = lda.pred$class)
+
+#Comment on the results. 
+```
+Based on the cross tabulations the LDA model worked best on predicting the high crime rates as it predicted all of them right. Of the low crime rates the model predicted 15 out of 25 right, of the med_low 17 out of 28 and of the med_high rates 10 out of 23 were predicted right by the LDA model.
+
+```{r 7.}
+# Reload the Boston dataset 
+data("Boston")
+
+# Standardize the dataset to get comparable distances
+boston_scaled <- scale(Boston)
+boston_scaled <- as.data.frame(boston_scaled)
+
+# Calculate the distances between the observations
+# euclidean distance matrix
+dist_eu <- dist(boston_scaled)
+
+# look at the summary of the distances
+summary(dist_eu)
+
+#Run k-means algorithm on the dataset.
+# k-means clustering
+km <- kmeans(boston_scaled, centers = 3)
+
+# plot the Boston dataset with clusters
+pairs(boston_scaled, col = km$cluster)
+
+#Investigate what is the optimal number of clusters and run the algorithm again. Visualize the clusters (for example with the pairs() or ggpairs() functions, where the clusters are separated with colors) and interpret the results.
+
+set.seed(123)
+
+# determine the number of clusters
+k_max <- 10
+
+# calculate the total within sum of squares
+twcss <- sapply(1:k_max, function(k){kmeans(boston_scaled, k)$tot.withinss})
+
+# visualize the results
+qplot(x = 1:k_max, y = twcss, geom = 'line') # here it seems 2 is an optimal number of clusters
+
+# k-means clustering
+km <- kmeans(boston_scaled, centers = 2)
+
+# plot the Boston dataset with clusters
+pairs(boston_scaled, col = km$cluster)
+p <- ggpairs(boston_scaled, col = km$cluster)
+p
+
+```
+The optimal number of clusters is visible in the qplot where the line drops suddenly. In this case it is around 2. Therefore 2 is the optimal number of clusters.
+```{r Bonus}
+# Standardize the dataset
+boston_scaled <- scale(Boston)
+boston_scaled <- as.data.frame(boston_scaled)
+
+# Perform k-means on the original Boston data with some reasonable number of clusters (> 2)
+# k-means clustering
+km <- kmeans(boston_scaled, centers = 3)
+
+# plot the Boston dataset with clusters
+pairs(boston_scaled, col = km$cluster)
+
+# add the cluster value to scaled data
+boston_scaled <- data.frame(boston_scaled, km$cluster)
+
+# Perform LDA using the clusters as target classes. Include all the variables in the Boston data in the LDA model. 
+# linear discriminant analysis
+lda.fit <- lda(km.cluster ~ ., data = boston_scaled[,-4])   #here I got an error of variable 4 (aka chas) being constant within groups and that is why I removed it. I am not sure if this is right way to do it but now it doesn't give me an error
+
+# print the lda.fit object
+lda.fit
+# Visualize the results with a biplot (include arrows representing the relationships of the original variables to the LDA solution).
+# the function for lda biplot arrows
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  graphics::arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+
+
+# plot the lda results 
+plot(lda.fit, dimen = 2, col = boston_scaled$km.cluster, pch = km$cluster)
+lda.arrows(lda.fit, myscale = 2)
+
+# Interpret the results. Which variables are the most influential linear separators for the clusters? (0-2 points to compensate any loss of points from the above exercises)
+```
+Based on the biplot it looks like the variables medv, rad, indus and tax are the most influential variables which shows inthe plot as longer arrows.
+
+```{r Super-Bonus}
+#Run the code below for the (scaled) train data that you used to fit the LDA. The code creates a matrix product, which is a projection of the data points.
+model_predictors <- dplyr::select(train, -crime)
+# check the dimensions
+dim(model_predictors)
+dim(lda.fit$scaling)
+# matrix multiplication
+matrix_product <- as.matrix(model_predictors) %*% lda.fit$scaling
+matrix_product <- as.data.frame(matrix_product)
+#Next, install and access the plotly package. Create a 3D plot (cool!) of the columns of the matrix product using the code below.
+install.packages("plotly")
+library(plotly)
+plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, type= 'scatter3d', mode='markers')
+
+#Adjust the code: add argument color as a argument in the plot_ly() function. Set the color to be the crime classes of the train set. 
+plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, type= 'scatter3d', mode='markers', color = train$crime)
+#Draw another 3D plot where the color is defined by the clusters of the k-means. How do the plots differ? Are there any similarities?
+#kmeans for train set
+# Perform k-means on the original Boston data with some reasonable number of clusters (> 2)
+# k-means clustering
+set.seed(123)
+km_train <- kmeans(train[,-14], centers = 3)
+
+plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, type= 'scatter3d', mode='markers', color = km_train$cluster)
+
+```
+Yes, the plots differ in that the dots color in different way in the plots but the spatial location of the dots seem to stay the same in both the plots.

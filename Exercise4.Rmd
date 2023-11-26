@@ -65,7 +65,7 @@ library(tidyverse)
 data("Boston")
 
 # explore the dataset
-glimpse(Boston)
+glimpse(Boston) # 506 rows amd 14 columns
 str(Boston)
 summary(Boston)
 # plot matrix of the variables
