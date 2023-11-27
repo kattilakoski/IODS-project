@@ -6,8 +6,11 @@
 # and here:
 # https://hdr.undp.org/system/files/documents/technical-notes-calculating-human-development-indices.pdf
 
-# Read in data:
+#access libraries:
+library(tidyverse)
 library(readr)
+
+# Read in data:
 hd <- read_csv("https://raw.githubusercontent.com/KimmoVehkalahti/Helsinki-Open-Data-Science/master/datasets/human_development.csv")
 gii <- read_csv("https://raw.githubusercontent.com/KimmoVehkalahti/Helsinki-Open-Data-Science/master/datasets/gender_inequality.csv", na = "..")
 
@@ -26,7 +29,8 @@ summary(gii)
 
 # Rename the variables with (shorter) descriptive names
 colnames(hd) = c("HDI.rank", "country", "HDI", "Life.Exp", "Edu.Exp", "Edu.Mean", "GNI", "GNI.HDI")
-"#hd column/variable names:
+
+"hd column/variable names:
 "HDI.rank" = "HDI rank"
 "country" = "country
 "HDI" = "Human development index"
@@ -37,6 +41,7 @@ colnames(hd) = c("HDI.rank", "country", "HDI", "Life.Exp", "Edu.Exp", "Edu.Mean"
 "GNI.HDI" = "GNI per capita rank minus HDI rank"
 
 colnames(gii) = c("GII.rank", "country", "GII", "Mat.Mor", "Ado.Birth", "Parli", "Edu2.F", "Edu2.M", "Labo.F", "Labo.M")
+
 #gii column/variable names:
 "GII.rank" = " GII Rank"
 "country" = "Country"
@@ -53,14 +58,18 @@ colnames(gii) = c("GII.rank", "country", "GII", "Mat.Mor", "Ado.Birth", "Parli",
  #Mutate the “Gender inequality” data and create two new variables. 
  #The first new variable should be the ratio of female and male populations 
  #with secondary education in each country (i.e., Edu2.F / Edu2.M). 
+gii <- mutate(gii, Edu2.FM = (Edu2.F / Edu2.M))
+
  #The second new variable should be the ratio of labor force participation 
  #of females and males in each country (i.e., Labo.F / Labo.M).
- 
- 
- 
+gii <- mutate(gii, Labo.FM = (Labo.F / Labo.M))
  
  
  #Join together the two datasets using the variable Country as the identifier.
  #Keep only the countries in both data sets (Hint: inner join). The joined data
  #should have 195 observations and 19 variables. Call the new joined data "human" 
  #and save it in your data folder (use write_csv() function from the readr package). 
+hd_gii <- inner_join(hd, gii, by = "country")
+dim(hd_gii) # 195  19
+
+write_csv(hd_gii, "./data/human.csv")
