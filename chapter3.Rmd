@@ -57,7 +57,7 @@ alc %>% group_by(high_use) %>% summarise(count = n(), mean(absences))
 
 Based on the distribution plots it looks like my hypothesis is correct and that younger students drink less than older students. When looking at the numerical summary the difference in the mean age is only 0.27 years which seems small. Against my hypothesis it looks like there is no difference in the  alcohol use of students with mother's from different education levels and this is also visible in the summary as the difference between mean education level of mothers is only 0.01. Based on the distributions it looks like my hypothesis on study time was right as the students drinking less seem to study more and this is backed up by the summary as well as there is a difference in the mean study times of students with high and low alcohol use. However, the difference is only 0.40 hours. It seems that my hypothesis was right about the absences as students that drink more seem to have more absences. The difference between absences of students with high and low alchol use is the clearest and the mean absence of students with high alcohol use is 2.67 absences more than students with low alcohol use.
 
-## Logistic regression, odd ratios and coefficients`
+## Logistic regression, odd ratios and coefficients
 ```{r}
 # find the model with glm()
 m <- glm(high_use ~ age + Medu + studytime + absences, data = alc, family = "binomial")
