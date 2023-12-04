@@ -73,3 +73,52 @@ hd_gii <- inner_join(hd, gii, by = "country")
 dim(hd_gii) # 195  19
 
 write_csv(hd_gii, "./data/human.csv")
+
+
+
+
+
+
+### Week 5 Data wrangling
+
+# load the data
+human <- read_csv("./data/human.csv")
+
+# 1. 
+
+# explore dimensions and structure:
+dim(human) #195 obs. 19 var.
+str(human)
+
+# Brief description of the dataset:
+# The dataset includes information on health, knowledge and empowerment of citizens from 195 countries. The dataset includes
+# 19 variables. The shortened versions are explained earlier in this document. The human development index (HDI) combines three
+# dimensions: long and healthy life, knowledge, and a decent standard of living. The gender development index (GDI) includes
+# information on gender inequalities.
+
+# 2.
+# Exclude unneeded variables:
+keep <- c("country", "Edu2.FM", "Labo.FM", "Life.Exp", "Edu.Exp", "GNI", "Mat.Mor", "Ado.Birth", "Parli")
+# select the 'keep' columns
+human <- select(human, one_of(keep))
+
+# 3.
+# Remove all rows with missing values
+human <- filter(human, complete.cases(human))
+
+# 4.
+# Remove the observations which relate to regions instead of countries.
+install.packages("countries")
+library(countries)
+human <- filter(human, is_country(human$country, check_for = NULL, fuzzy_match = TRUE))
+
+# 5.
+# The data should now have 155 observations and 9 variables (including 
+# the "Country" variable). Save the human data in your data folder. You can 
+# overwrite your old ‘human’ data.
+# At this point I had 156 observations so I checked the provided file and 
+# the Arab states was not in that so I will remove it from my human dataframe.
+check <-  read_csv("https://raw.githubusercontent.com/KimmoVehkalahti/Helsinki-Open-Data-Science/master/datasets/human2.csv")
+human <-subset(human, country != "Arab States")
+
+write_csv(human, "./data/human.csv")
