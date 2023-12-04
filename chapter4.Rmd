@@ -7,7 +7,7 @@ output: html_document
 
 # Assignment 4 analysis exercises
 ## Reading in and description of the data
-```{r 2., echo=TRUE}
+```{r 2.}
 # Install required packages:
 #install.packages(c("MASS", "corrplot"))
 #install.packages("plotly")
