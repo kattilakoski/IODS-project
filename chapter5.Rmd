@@ -55,7 +55,8 @@ The correlation plot visualises the correlations between variable better and we 
 pca_human <- prcomp(human)
 
 # draw a biplot of the principal component representation and the original variables, with PC1 and PC2
-p <- biplot(pca_human, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
+#commented out but graph below as an image
+#p <- biplot(pca_human, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
 ```
 ![PCA biplot with non-standardised data on human development indices. Countries are shown in grey and the variables (Edu2.FM = ratio of female and male populations with secondary education, Labo.FM = ratio of labor force participation of females and males, Life.Exp=  Life expectancy at birth, Edu.Exp = Expected years of schooling, GNI = Gross National Income per capita, Mat.Mor = Maternal Mortality Ratio, Ado.Birth = Adolescent Birth Rate, Parli = Percent Representation in Parliament) in pink.](images/human_PCA_non_std.png)
 
@@ -73,7 +74,8 @@ human_std <- as.data.frame(human_std)
 pca_human <- prcomp(human_std)
 
 # draw a biplot of the principal component representation and the original variables, with PC1 and PC2
-p <- biplot(pca_human, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
+#commented out but graph below as an image
+#p <- biplot(pca_human, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
 
 
 ```
@@ -128,8 +130,9 @@ mca <- MCA(tea_time, graph = FALSE)
 summary(mca)
 
 # visualize MCA
-p1 <- plot(mca, invisible=c("ind"), graph.type = "classic", habillage = "quali")
-p2 <- plot(mca, graph.type = "classic", habillage = "quali")
+# these are commented out to avoid duplicate graphs as I attached them as images
+#p1 <- plot(mca, invisible=c("ind"), graph.type = "classic", habillage = "quali")
+#p2 <- plot(mca, graph.type = "classic", habillage = "quali")
 
 ```
 ![MCA plot with only variables.](images/MCA_var.png)
