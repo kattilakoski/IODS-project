@@ -9,7 +9,7 @@ output: html_document
 ## 1. Graphical overview and summaries of the data
 
 
-```{r 1.}
+```{r 1. overview}
 # Load libraries:
 
 library(tibble)
@@ -50,7 +50,7 @@ The correlation plot visualises the correlations between variable better and we 
 
 ## 2. Principal component analysis (PCA) and a biplot for non-standardised data
 
-```{r 2.}
+```{r 2. PCA}
 # perform principal component analysis (with the SVD method)
 pca_human <- prcomp(human)
 
@@ -62,7 +62,7 @@ p <- biplot(pca_human, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppi
 
 ## 3. & 4. PCA and biplot with standardised data
 
-```{r 3. }
+```{r 3. PCA}
 # standardise the variables:
 human_std <- scale(human)
 summary(human_std)
@@ -90,7 +90,7 @@ In the PCA biplot with standardised data it is visible that more variables have 
 ## 5. Multiple correspondence analysis
 About the data: "The tea data comes from the FactoMineR package and it is measured with a questionnaire on tea: 300 individuals were asked how they drink tea (18 questions) and what are their product's perception (12 questions). In addition, some personal details were asked (4 questions)."
 
-```{r 5. }
+```{r 5. MCA}
 # Load libraries:
 library(dplyr)
 library(tidyr)
